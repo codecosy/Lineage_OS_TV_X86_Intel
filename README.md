@@ -24,6 +24,8 @@ md5
 ### Build instructions can be found in [BUILD.MD](https://github.com/codecosy/Lineage_OS_TV_X86_Intel/blob/main/BUILD.md)
 ### ORIGINAL README TEXT BELOW
 
+***
+
 # LineageOS TV x86 Intel Patches
 
 This repository contains the source files, image patch scripts, validation scripts, and test notes used to build a patched LineageOS 21 Android TV x86_64 ISO for Intel mini PCs.
