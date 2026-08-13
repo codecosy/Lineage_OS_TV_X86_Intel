@@ -7,12 +7,12 @@
 
 #### Download:
 https://mega.nz/file/4JhnWJKB#pcicHVND-8UexlhtM-wad66nOyrly-qyNjjItMvyjms  
-cff2845b6e4632fcf423a5cc057ca5a3  
-md5  
+c8f6756edc0b99f90e98d1ce4e56b45bae4d13ffed48014c83203eea91066cd8  
+sha256
 #### Alternative Build (which should function exactly the same, but I haven't tested it. It's here just in case. It was built more recently):
 https://mega.nz/file/VJACmICI#raJYCn9YhanomudAwoNo8a_GAbol5hWNJAr1C3Gd3zY  
-d7d219fa0eacded60f42369607d94bb5  
-md5  
+e1cc278b5744112bc8089bb0b27bb14e189bcdbeb461d953d64966af8959b4f8  
+sha256 
 <br>
 
 #### **Known issues that also exist upstream when using an HP mini PC:**
