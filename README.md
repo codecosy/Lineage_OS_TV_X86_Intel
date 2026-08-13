@@ -1,23 +1,28 @@
-### This repo exists because BigShoots's repo doesn't include a built ISO.
+### This repo exists to provide a built ISO of BigShoots's repo. It's not exact. My main objective was to get HDMI audio working on HP mini PCs.
 - This ISO doesn't have GApps.
 - Another fire tv remote keylayout has been added.
-- The audio output switch can be accessed as an app. Though, I saw talk of the upstream dev moving it into settings.
+- The audio output switch can be accessed as an app. Though, I saw talk of the upstream dev moving it into settings.  
+<br>
 
 #### Download:
-https://mega.nz/file/4JhnWJKB#pcicHVND-8UexlhtM-wad66nOyrly-qyNjjItMvyjms
-cff2845b6e4632fcf423a5cc057ca5a3
-</br> md5
+https://mega.nz/file/4JhnWJKB#pcicHVND-8UexlhtM-wad66nOyrly-qyNjjItMvyjms  
+cff2845b6e4632fcf423a5cc057ca5a3  
+md5  
 #### Alternative Build (which should function exactly the same, but I haven't tested it. It's here just in case. It was built more recently):
-https://mega.nz/file/VJACmICI#raJYCn9YhanomudAwoNo8a_GAbol5hWNJAr1C3Gd3zY
-d7d219fa0eacded60f42369607d94bb5
-</br> md5
+https://mega.nz/file/VJACmICI#raJYCn9YhanomudAwoNo8a_GAbol5hWNJAr1C3Gd3zY  
+d7d219fa0eacded60f42369607d94bb5  
+md5  
+<br>
 
-**Known issues that also exist upstream when using an hp mini pc:**
+#### **Known issues that also exist upstream when using an HP mini PC:**
 - ~25% chance of the screen flickering black for a second instead of android going to sleep when `sleep` is clicked.
-- Restarting android results in a connected Fire TV remote disconnecting until the remote is put into pairing mode. I believe this is a BLE issue. I'm not sure. I gave up on it.
+- Restarting android results in a connected Fire TV remote disconnecting until the remote is put into pairing mode. I believe this is a BLE issue. I'm not sure. I gave up on it.  
+<br>
 
-I'll delete this repo the moment the upstream project implements an HDMI audio fix.
+#### This repo will be obsolete when the upstream project implements an HDMI audio fix.
+
 ***
+
 # LineageOS TV x86 Intel Patches
 
 This repository contains the source files, image patch scripts, validation scripts, and test notes used to build a patched LineageOS 21 Android TV x86_64 ISO for Intel mini PCs.
