@@ -3,7 +3,7 @@
 These instructions will create a patched ISO file based on the [BigShoots/Lineage_OS_TV_X86_Intel](https://github.com/BigShoots/Lineage_OS_TV_X86_Intel) repo and a stock `lineage-21.0-20260331-UNOFFICIAL-x86_64_tv-signed.iso`.
 We're just extracting the existing ISO's system image, copying files into it, and repackaging it. It's just an image patch.
 
-I don't care for GApps, couldn't figure out USB storage "adoptable" support, and found that the Settings-menu resource overlay was messing with Settings labels. These are being omitted in the following instructions.
+I don't care for GApps, couldn't figure out USB storage "adoptable" support, and found that the Settings menu resource overlay was messing with Settings labels. These are being omitted in the following instructions.
 
 ## Prerequisites
 
