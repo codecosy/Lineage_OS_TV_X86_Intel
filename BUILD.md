@@ -308,7 +308,7 @@ The finished ISO is written to:
 ~/lineage-tv-patch/out/lineage-21.0-20260331-UNOFFICIAL-x86_64_tv-audio-output.iso
 ```
 
-Its hash will be different every build.
+The ISO's hash will be different every build.
 
 ## 9. Validate
 
