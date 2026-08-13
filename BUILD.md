@@ -40,6 +40,7 @@ PLEASE check to make sure that a newer ISO that already contains the HDMI audio 
 
 You can grab the 2026-03-31 lineage os tv x86 ISO from [here](https://sourceforge.net/projects/lineageos-tv-x86/files/lineage-21.0/x86_64_tv/lineage-21.0-20260331-UNOFFICIAL-x86_64_tv-signed.iso/download).\
 If you are not using the correct ISO file, this guide will not work.
+Your file should have a SHA256 hash of `29c44bb7bb0cb6531a11e3778377c985c4c96b881b2666fba3901e4c21d67bc2`
 
 **Below, replace `/path/to/` with the real path to your lineage os tv x86 iso**
 
@@ -294,13 +295,11 @@ new_size=$(stat -c%s work/system/system.efs.new)
 echo "original: $orig_size   new: $new_size"
 if [ "$new_size" -gt "$orig_size" ]; then
     echo "*** STOP: new image is larger than the original, do not proceed ***"
-    exit 1
+else
+    echo "OK: fits"
+    mkdir -p out
+    bash Lineage_OS_TV_X86_Intel/scripts/package_iso.sh
 fi
-
-echo "OK: fits"
-
-mkdir -p out
-bash Lineage_OS_TV_X86_Intel/scripts/package_iso.sh
 ```
 
 The finished ISO is written to:
@@ -309,6 +308,8 @@ The finished ISO is written to:
 ~/lineage-tv-patch/out/lineage-21.0-20260331-UNOFFICIAL-x86_64_tv-audio-output.iso
 ```
 
+Its hash will be different every build.
+
 ## 9. Validate
 
 ```bash
@@ -316,3 +317,9 @@ sudo bash Lineage_OS_TV_X86_Intel/scripts/validate_iso.sh
 ```
 
 This will mount the finished ISO read-only and confirm that the audio output switcher app and its permission files are present. It also verifies the APK's signature and prints the boot layout to ensure the partition tables weren't disturbed.
+
+# Good to Know
+
+- **The HDMI audio policy patch is just a workaround, not a root-layer fix.**
+  - The primary audio HAL doesn't honor this named route. Rather, it falls back to its own internal ALSA device selection.
+    - Audio does reach HDMI, but through that fallback and not through the route this patch defines.
