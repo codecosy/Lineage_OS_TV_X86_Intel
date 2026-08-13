@@ -1,7 +1,7 @@
 ### This repo exists to provide a built ISO of BigShoots's repo. It's not exact. My main objective was to get HDMI audio working on HP mini PCs.
 - This build doesn't have GApps.
 - Another fire tv remote keylayout has been added.
-- The audio output switch can be accessed as an app. Though, I saw talk of the upstream dev moving it into settings.
+- The audio output switch can be accessed as an app. Though, I saw that the upstream dev intends on moving it into settings.
 <br>
 
 #### Download:
