@@ -1,4 +1,4 @@
-# Building the patched ISO from scratch
+# Building the patched ISO
 
 These instructions will create a patched ISO file based on the [BigShoots/Lineage_OS_TV_X86_Intel](https://github.com/BigShoots/Lineage_OS_TV_X86_Intel) repo and a stock `lineage-21.0-20260331-UNOFFICIAL-x86_64_tv-signed.iso`.
 We're just extracting the existing ISO's system image, copying files into it, and repackaging it. It's just an image patch.
@@ -23,7 +23,7 @@ sudo apt install -y \
   android-sdk-platform-tools adb
 ```
 
-I installed two build-tools versions because the app needs to be compiled against an old Android API stub (`android-23`) and the `d8` dexer that ships in newer `build-tools` pacakges on Mint crash with an internal `NullPointerException` on certain ordinary Java constructs when fed bytecode compiled by JDK 21.
+I installed two build-tools versions because the app needs to be compiled against an old Android API stub (`android-23`) and the `d8` dexer that ships in newer `build-tools` pacakges on Mint crashes with an internal `NullPointerException` on certain ordinary Java constructs when fed bytecode compiled by JDK 21.
 Compiling with JDK 17 avoids the crash.
 
 ## 1. Clone this repo and set up a workspace in a dedicated directory
@@ -38,7 +38,7 @@ git clone https://github.com/codecosy/Lineage_OS_TV_X86_Intel.git
 
 PLEASE check to make sure that a newer ISO that already contains the HDMI audio fix doesn't already exist.
 
-You can grab the original lineage os tv x86 ISO from [here](https://sourceforge.net/projects/lineageos-tv-x86/files/lineage-21.0/x86_64_tv/lineage-21.0-20260331-UNOFFICIAL-x86_64_tv-signed.iso/download).\
+You can grab the 2026-03-31 lineage os tv x86 ISO from [here](https://sourceforge.net/projects/lineageos-tv-x86/files/lineage-21.0/x86_64_tv/lineage-21.0-20260331-UNOFFICIAL-x86_64_tv-signed.iso/download).\
 If you are not using the correct ISO file, this guide will not work.
 
 **Below, replace `/path/to/` with the real path to your lineage os tv x86 iso**
@@ -52,7 +52,7 @@ sha256sum lineage-21.0-20260331-UNOFFICIAL-x86_64_tv-signed.iso
 ## 3. Extract the ISO and pull out `system.img`
 
 The layout is nested as such:\
-ISO -> `system.efs` (an EROFS-formatted container) -> `system.img` (an ext4 filesystem, which will be patched)
+ISO -> `system.efs` (an EROFS filesystem image) -> `system.img` (an ext4 filesystem, which will be patched)
 
 ```bash
 cd ~/lineage-tv-patch
@@ -71,7 +71,7 @@ sudo umount work/system/efs-mnt
 cp --sparse=always work/system/system.img work/system/system.img.orig-backup
 ```
 
-## 4. Identify your remote's Bluetooth product ID (OPTIONAL)
+## 4. Identify your Fire TV remote's Bluetooth product ID (OPTIONAL)
 
 *(This is optional in the event you have a Fire TV remote and want to change its key mappings using a keylayout file. From my experience, my remote worked just fine without doing this. I just wanted to disable power, volume, and mute in android so they would only affect my TV.)*
 
@@ -130,7 +130,7 @@ Only the first one will be installed due to the issue with the overlay previousl
 
 ## 6. Add the keylayout and a default-permissions file that fixed some Bluetooth reconnect logic
 
-*Rename the `0421.kl` file in the block below if you renamed it in step 4. If you didn't do step 4, don't change anything.* 
+If you skipped step 4, leave the filename below as `Vendor_0171_Product_0421.kl`. If you identified a different product ID, replace `0421` with your product ID wherever this filename appears below.
 
 ```bash
 cat > work/audio-output-switch/keylayout/Vendor_0171_Product_0421.kl << 'EOF'
@@ -270,6 +270,11 @@ sudo e2fsck -fy "$SYSTEM_IMG"
 
 ## 8. Repack `system.img` into `system.efs` and rebuild the ISO
 
+At this point, the patched `system.img` is finished, but it is not the final ISO yet. The ISO contains `system.efs`, which is an EROFS container holding `system.img`. The following commands rebuild that container and then run `package_iso.sh` to put the new `system.efs` back into a copy of the original ISO. The result is the finished patched ISO.
+
+`package_iso.sh` resizes a copy of the new `system.efs` to the original's exact reserved size and writes it into a copy of the ISO at a fixed byte offset. If the new image is smaller, the file is extended with sparse/zero-filled space. If it is larger, `truncate` discards the excess data.\
+The size check below stops the build before `package_iso.sh` can truncate an oversized filesystem.
+
 ```bash
 cd ~/lineage-tv-patch
 
@@ -287,16 +292,16 @@ fsck.erofs -p work/system/system.efs.new
 orig_size=$(stat -c%s work/iso-root/system.efs)
 new_size=$(stat -c%s work/system/system.efs.new)
 echo "original: $orig_size   new: $new_size"
-[ "$new_size" -gt "$orig_size" ] && echo "*** STOP: new image is larger than the original, do not proceed ***" || echo "OK: fits"
+if [ "$new_size" -gt "$orig_size" ]; then
+    echo "*** STOP: new image is larger than the original, do not proceed ***"
+    exit 1
+fi
+
+echo "OK: fits"
 
 mkdir -p out
 bash Lineage_OS_TV_X86_Intel/scripts/package_iso.sh
 ```
-
-If `mkfs.erofs` rejects `-Ebig_pcluster` with "unknown extended option," drop that flag. It's obsolete on `erofs-utils` 1.7.1+, where large physical clusters are enabled automatically whenever `-C` exceeds the block size.
-
-`package_iso.sh` pads the new `system.efs` to the original's exact reserved size and writes it into a copy of the ISO at a fixed byte offset.\
-**If your patched image ever comes out larger than the original** (the size check above), do not run `package_iso.sh`. It truncates rather than growing and will silently corrupt the image.
 
 The finished ISO is written to:
 
