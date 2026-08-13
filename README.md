@@ -1,7 +1,7 @@
 ### This repo exists to provide a built ISO of BigShoots's repo. It's not exact. My main objective was to get HDMI audio working on HP mini PCs.
 - This build doesn't have GApps.
 - Another fire tv remote keylayout has been added.
-- The audio output switch can be accessed as an app. Though, I saw talk of the upstream dev moving it into settings.  
+- The audio output switch can be accessed as an app. Though, I saw talk of the upstream dev moving it into settings.
 <br>
 
 #### Download:
@@ -21,7 +21,8 @@ md5
 
 #### This repo will be obsolete when the upstream project implements an HDMI audio fix.
 
-***
+### Build instructions can be found in BUILD.MD
+### ORIGINAL README TEXT BELOW
 
 # LineageOS TV x86 Intel Patches
 
