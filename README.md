@@ -21,7 +21,7 @@ md5
 
 #### This repo will be obsolete when the upstream project implements an HDMI audio fix.
 
-### Build instructions can be found in BUILD.MD
+### Build instructions can be found in [BUILD.MD](https://github.com/codecosy/Lineage_OS_TV_X86_Intel/blob/main/BUILD.md)
 ### ORIGINAL README TEXT BELOW
 
 # LineageOS TV x86 Intel Patches
