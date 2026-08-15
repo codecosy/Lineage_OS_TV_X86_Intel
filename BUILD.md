@@ -40,7 +40,7 @@ PLEASE check to make sure that a newer ISO that already contains the HDMI audio 
 
 You can grab the 2026-03-31 lineage os tv x86 ISO from [here](https://sourceforge.net/projects/lineageos-tv-x86/files/lineage-21.0/x86_64_tv/lineage-21.0-20260331-UNOFFICIAL-x86_64_tv-signed.iso/download).\
 If you are not using the correct ISO file, this guide will not work.
-Your file should have a SHA256 hash of:  
+Your file should have a SHA256 hash of:  \
 `29c44bb7bb0cb6531a11e3778377c985c4c96b881b2666fba3901e4c21d67bc2`
 
 ### If you just wish to build a working ISO and don't care beyond that, this is the only step in the build instructions that will require you to edit text in a code block.  
