@@ -40,8 +40,10 @@ PLEASE check to make sure that a newer ISO that already contains the HDMI audio 
 
 You can grab the 2026-03-31 lineage os tv x86 ISO from [here](https://sourceforge.net/projects/lineageos-tv-x86/files/lineage-21.0/x86_64_tv/lineage-21.0-20260331-UNOFFICIAL-x86_64_tv-signed.iso/download).\
 If you are not using the correct ISO file, this guide will not work.
-Your file should have a SHA256 hash of `29c44bb7bb0cb6531a11e3778377c985c4c96b881b2666fba3901e4c21d67bc2`
+Your file should have a SHA256 hash of:  
+`29c44bb7bb0cb6531a11e3778377c985c4c96b881b2666fba3901e4c21d67bc2`
 
+### If you just wish to build a working ISO and don't care beyond that, this is the only step in the build instructions that will require you to edit text in a code block.  
 **Below, replace `/path/to/` with the real path to your lineage os tv x86 iso**
 
 ```bash
@@ -132,7 +134,8 @@ Only the first one will be installed due to the issue with the overlay previousl
 ## 6. Add the keylayout and a default-permissions file that half fixed some Bluetooth reconnect logic
 
 If you skipped step 4, leave the filename below as `Vendor_0171_Product_0421.kl` or just omit adding the keymap entirely.  
-If you identified a different product ID, replace `0421` with your product ID wherever this filename appears below.
+If you identified a different product ID, replace `0421` with your product ID wherever this filename appears below.  
+If you wish to edit your keymap in any way, this is the place to do it.  
 
 ```bash
 cat > work/audio-output-switch/keylayout/Vendor_0171_Product_0421.kl << 'EOF'
@@ -187,9 +190,8 @@ This is likely a deeper Android Bluetooth-stack issue specific to cold boot, not
 In practice, you'll likely still need to re-pair the Fire TV Remote (by holding the pairing button for an arbitrary length of time repeatedly...) after a full reboot.  
 Reconnecting after waking from sleep, as opposed to a full reboot, worked reliably in testing.
 
-In short, I'm not sure whether the permissions file above was useful in any way.  
-I'm not sure whether its absence wouldn't matter with regards to the Fire TV remote reconnecting after waking from sleep.  
-I'm not sure whether there is a way to get the remote to reconnect after a reboot.  
+In short, I'm not sure whether the permissions file above is really useful.  
+I'm also not sure whether there is a way to get the remote to reconnect after a reboot.  
 I'm just so burnt out on testing that I'm personally content with leaving things as they are.  
 
 ## 7. Patch `system.img` to include the Audio output switcher app
@@ -240,7 +242,7 @@ sudo bash Lineage_OS_TV_X86_Intel/scripts/install_primary_hdmi_policy_to_system_
 
 The original repo's `install_fire_remote_keylayout_to_system_img.sh` is hardcoded to the `0413` filename, so it won't pick up a differently-named file. This installs the corrected one directly.
 
-If your filename differs from `0421`, once again, substitute your own filename.
+If your filename differs from `0421`, once again, substitute your own filename. If you wish to not include any additional keymap, you can once again remove that part from the code block below.
 
 ```bash
 cd ~/lineage-tv-patch
@@ -261,7 +263,7 @@ sudo umount "$MNT"
 sudo e2fsck -fy "$SYSTEM_IMG"
 ```
 
-### Default-permissions (Bluetooth reconnect fix)
+### Default-permissions (Bluetooth reconnect partial fix)
 
 ```bash
 cd ~/lineage-tv-patch
