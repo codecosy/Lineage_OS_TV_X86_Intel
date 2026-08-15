@@ -129,9 +129,10 @@ cd ~/lineage-tv-patch
 This should create `work/audio-output-switch/build/dist/AudioOutputSwitch.apk` and `AudioOutputSettingsOverlay.apk`.\
 Only the first one will be installed due to the issue with the overlay previously mentioned.  
 
-## 6. Add the keylayout and a default-permissions file that fixed some Bluetooth reconnect logic
+## 6. Add the keylayout and a default-permissions file that half fixed some Bluetooth reconnect logic
 
-If you skipped step 4, leave the filename below as `Vendor_0171_Product_0421.kl`. If you identified a different product ID, replace `0421` with your product ID wherever this filename appears below.
+If you skipped step 4, leave the filename below as `Vendor_0171_Product_0421.kl` or just omit adding the keymap entirely.  
+If you identified a different product ID, replace `0421` with your product ID wherever this filename appears below.
 
 ```bash
 cat > work/audio-output-switch/keylayout/Vendor_0171_Product_0421.kl << 'EOF'
@@ -175,6 +176,21 @@ cat > work/audio-output-switch/default-permissions-org.lineageos.tv.audiooutput.
 </exceptions>
 EOF
 ```
+
+The audio output switcher app already contains some logic (from BigShoot's repo) that tries to reconnect the Fire TV remote's Bluetooth HID connection on boot and on Wi-Fi/Bluetooth state changes.  
+Without the default-permissions file above, that logic crashes immediately upon every attempt with error `SecurityException: Need android.permission.BLUETOOTH_CONNECT permission`. `BLUETOOTH_CONNECT` is a "dangerous" runtime permission and only listing it in `privapp-permissions` doesn't actually grant it.  
+This file grants the needed permission automatically at first boot so that the existing reconnect logic can run instead of crashing before it starts.
+
+Though, this doesn't completely fix the Fire TV remote reconnection after a full reboot issue. Even with this fix in place, testing on two different bluetooth chipsets (a random bluetooth usb dongle and an AX210) showed that Android's own `BluetoothHidHostService` rejects reconnection attempts with `"Hid Device not disconnected"` for roughly the first 30-40 seconds after a cold boot and often still fails to actually connect once it stops rejecting.  
+This is likely a deeper Android Bluetooth-stack issue specific to cold boot, not something fixable at the app permission level.
+
+In practice, you'll likely still need to re-pair the Fire TV Remote (by holding the pairing button for an arbitrary length of time repeatedly...) after a full reboot.  
+Reconnecting after waking from sleep, as opposed to a full reboot, worked reliably in testing.
+
+In short, I'm not sure whether the permissions file above was useful in any way.  
+I'm not sure whether its absence wouldn't matter with regards to the Fire TV remote reconnecting after waking from sleep.  
+I'm not sure whether there is a way to get the remote to reconnect after a reboot.  
+I'm just so burnt out on testing that I'm personally content with leaving things as they are.  
 
 ## 7. Patch `system.img` to include the Audio output switcher app
 
